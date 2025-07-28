@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<mate cahrset="utf-8">
+<title>シューティングゲームy</title>
+</head>
+<body>
+<img src="fighter.gif" id="fighter">
+<img src="teki.gif" id="teki">
+<img src="beam.gif" id="beam">
+</body>
+</html>
+<style>
+#fighter{
+	position:absolute;
+	left:0; top:150px;
+}
+#teki{
+	position:absolute;
+	left:0; top:0;
+}
+#beam{
+	position:absolute;
+	left:0; top:-50px;
+}
+body{
+	background-image:url("bg.gif");
+	background-repeat:no-repeat;
+}
+</style>
+
+<script src="jquery.js"></script>
+<script>
+$(function(){
+	tx=0; ty=0; tmovex=2; tmovey=10;
+	fx=0; fy=150; fmovex=2;
+	bx=0; by=-50;
+	cnt=0;
+	
+	c=setInterval("game()",30);
+
+	$(document).keypress(function(e){
+		k=e.keyCode;
+		//alert(k);
+		if(k==99){fx=fx+fmovex;}
+		if(k==122){fx=fx-fmovex;}
+		if(k==120){
+			bx=fx+12;
+			by=120;
+		}
+	});
+
+});
+function game(){
+	tx=tx+tmovex;
+	by=by-5;
+	if(tx>100){tmovex=-2-cnt; ty=ty+tmovey;}
+	if(tx<0){tmovex=2+cnt; ty=ty+tmovey;}
+
+	if(tx-7<bx && bx<tx+32 && ty<by && by<ty+32){
+		//alert("敵を撃退クリア");
+		cnt++;
+		tx=0; ty=0;
+		tmovex=2+cnt; tmovey=10;
+		by=-50;
+	}
+	if(fy<ty+32 && tx+32>fx && fx+32>tx){
+		alert("敵と接触アウト 敵を"+cnt+"匹撃退"); 
+		clearInterval(c);
+	}
+	if(cnt==10){
+		alert("敵を10回撃退クリア！");
+		clearInterval(c);
+	}
+
+	$("#teki").css("left",tx);
+	$("#teki").css("top",ty);
+	$("#fighter").css("left",fx);
+	$("#beam").css("left",bx);
+	$("#beam").css("top",by);
+}
+
+
+
+</script>
